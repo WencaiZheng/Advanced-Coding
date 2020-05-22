@@ -74,5 +74,11 @@
    git branch -d develop2
    ```
 
+4. remotely delete branch
 
+   ``` bash
+   git branch origin --delete develop2
+   ```
+
+   
 
