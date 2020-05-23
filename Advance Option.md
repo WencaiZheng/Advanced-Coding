@@ -28,28 +28,3 @@
 
 
 
-## string split
-
-+ Overloading occurs when two or more methods in __one__ class have the __same method name__ but different parameters. 
-+ Overriding means having two methods with the __same method name and parameters__ (eg method signature). One of the methods is in the parent class and the other is in the child class. Derived class function can override the base class function
-
-## Ternary Operators
-
-```c++
-if (x>3)
-    y=2;
-else
-    y=1;
-static int y = x>3?2:1;
-```
-
-
-
-## sort the dictionary by its values
-
-
-
-## sort the dictionary by its keys
-
-
-

@@ -1,5 +1,16 @@
 # C++ Questions
 
+## Call by reference / value
+
+always pass the object use `const` call by reference
+
+```c++
+void PrintString(const string& string)
+{
+    std::cout<<string<<std::endl;
+}
+```
+
 ## Pointer and dereference operator
 
 ```c++
@@ -13,6 +24,56 @@
  // now *p == 0, since p == &x and therefore *p == x
  *p = 1;  // equivalent to x = 1, since p == &x
  // now *p == 1 and x == 1
+```
+
+## Dynamic allocation
+
+ask for a specific block of memory ahead of time, new is an operator
+
+```c++
+class Entity
+{    
+ //   
+}
+int* b = new int[50]; // array with 4*50 bytes and the address of which is b
+Entity* e = new Entity(); // this will call the constructor
+Entity* e = (Entity*)malloc(sizeof(Entity)); //do the same above but no calling constructor
+delete[] b; //release the address in the heap
+delete e; //call the destructor
+```
+
+## Function template
+
+```C++
+template <typename T>]
+void print(T x)
+{
+    std::cout<<x<<endl;
+}
+```
+
+## Class template
+
+```C++
+template <class T>
+class Stack { 
+  private: 
+    vector<T> elems;     // 元素 
+ 
+  public: 
+    void push(T const&);  // 入栈
+    void pop();               // 出栈
+    T top() const;            // 返回栈顶元素
+    bool empty() const
+    {       // 如果为空则返回真。
+        return elems.empty(); 
+    } 
+}; 
+template <class T>
+void Stack<T>::push (T const& elem) 
+{ 
+    elems.push_back(elem);    
+} 
 ```
 
 
@@ -47,20 +108,79 @@ class euro
 * There is a default constructor if not defined
 * Override the constructors as you like
 
-## Abstract class: 
+## Inheritance and Polymorphism
 
-+ Declared abstract
-+  Cannot be instantiated, but they can be derived
+- When derived class overrides the base class, the function of the base needs to be virtual. If there is not meaning to instantiate the base class, the class should be set to abstract class, because it includes pure virtual function. 
 
 ```C++
-class Shapes   //抽象类
+class Shapes
 {
-protected:
+    protected:
     int x, y;
-public:
+    public:
     void setvalue(int d, int w=0){x=d;y=w;}
-    virtual void disp()=0;//纯虚函数
+    virtual void disp()=0;//pure virtual
 };
+```
+
+- polymorphism means the multiple derived classes override the based class's virtual function in different ways.
+
+```C++
+class Shape {
+protected:
+	int width, height;
+public:
+	Shape(int a = 0, int b = 0)
+	{width = a; height = b;}
+	virtual int area() = 0;
+};
+class Rectangle : public Shape {
+	public:
+		Rectangle(int a = 0, int b = 0) :Shape(a, b) { }
+		int area() { return (width * height); }
+	};
+class Triangle : public Shape{
+public:
+	Triangle(int a = 0, int b = 0) :Shape(a, b) { }
+	int area() { return (width * height / 2); }
+};
+```
+
+## Encapsulation 
+
+```c++
+class Adder{
+   public:
+      // 构造函数
+      Adder(int i = 0)
+      {
+        total = i;
+      }
+      // 对外的接口
+      void addNum(int number)
+      {
+          total += number;
+      }
+      // 对外的接口
+      int getTotal()
+      {
+          return total;
+      };
+   private:
+      // 对外隐藏的数据
+      int total;
+};
+int main( )
+{
+   Adder a;
+   
+   a.addNum(10);
+   a.addNum(20);
+   a.addNum(30);
+ 
+   cout << "Total " << a.getTotal() <<endl;
+   return 0;
+}
 ```
 
 
@@ -80,6 +200,88 @@ else
 static int y = x>3?2:1;
 ```
 
+## Static member and static member function
+
+- Static member always have one copy no matter how many instances are initialized. 
+- The static member are shared in all the objects.  
+- Can't initialize the static member inside class, only allowed outside using ::, if no initialization, it is at first object being created.
+- if announce function as static, it could be used without creating any object.
+- static member function cannot use this pointer, can only access to static member and other static member functions.
+
+```C++
+class Box
+{
+   public:
+      static int objectCount;
+      // 构造函数定义
+      Box(double l=2.0, double b=2.0, double h=2.0)
+      {
+         cout <<"Constructor called." << endl;
+         length = l;
+         breadth = b;
+         height = h;
+         // 每次创建对象时增加 1
+         objectCount++;
+      }
+      double Volume()
+      {
+         return length * breadth * height;
+      }
+      static int getCount()
+      {
+         return objectCount;
+      }
+   private:
+      double length;     // 长度
+      double breadth;    // 宽度
+      double height;     // 高度
+};
+// 初始化类 Box 的静态成员
+int Box::objectCount = 0;
+int main(void)
+{
+   cout << "Final Stage Count: " << Box::getCount() << endl;//0
+   Box Box1(3.3, 1.2, 1.5);    // 声明 box1
+   Box Box2(8.5, 6.0, 2.0);    // 声明 box2
+   // 输出对象的总数
+   cout << "Total objects: " << Box::objectCount << endl;// 2 
+   return 0;
+}
+```
+
+
+
+
+
+## Singleton
+
+Initiated once only, such as random number generator. It is used to organize a bunch of global variables and include them in a single name space. Similar to using a namespace.
+
+```c++
+class Singleton
+{
+    public:
+    Singleton(const Singleton&) = delete;//copy constructor as delete
+    static Singleton& Get()
+    {
+        return s_Instance;
+    }
+    void Function() {}
+    private:
+    Singleton() {}
+    static Singleton s_Instance;
+}
+Singleton Singleton::s_Instance;
+int main()
+{
+    Singleton::Get().Function();
+}
+```
+
+
+
+
+
 ## Unique Pointer
 
 
@@ -90,23 +292,13 @@ static int y = x>3?2:1;
 
 
 
-## Templates
 
-```c++
-template <typename T>
-void print(T x)
-{
-    cout<<x<<endl;
-}
-void main()
-{
-    print(5.5);
-}
-```
+
+## 
 
 ## STL
 
-### 
+Four kinds
 
 ### Containers
 
@@ -118,13 +310,29 @@ int main()
         g1.push_back(i); 
     cout << "Output of begin and end: "; 
     for (auto i = g1.begin(); i != g1.end(); ++i) 
-        cout << *i << " "; 
+        cout << *i << " ";
 }
 ```
+
+```C++
+list<string> mylist({ "3","2" });
+mylist.sort();
+```
+
+
 
 ### Functions
 
 ### Algorithms
+
+```C++ #include <algorithm>
+#include <algorithm>
+int myarray[5] = { 1,9,2,22,3 };
+vector<int> myvector(myarray, myarray + 4);
+sort(myvector.begin(), myvector.end());
+list<string> mylist({ "3","2" });
+mylist.sort();
+```
 
 ### Iterators
 
