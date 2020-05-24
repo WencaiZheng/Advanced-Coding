@@ -1,4 +1,6 @@
-# C++ Questions
+# C++ Notes
+
+# Basic
 
 ## Call by reference / value
 
@@ -13,34 +15,100 @@ void PrintString(const string& string)
 
 ## Pointer and dereference operator
 
+- Pointer to a constant: cannot change the value that is pointed at.
+
+```C++
+const double taxRates[] = {0.65, 0.8, 0.75};
+const double *ratePtr; // ratePtr points to a const double value
+```
+
+- Constant pointer: address in pointer cannot change once pointer is initialized.
+
+  * Must be initialized when defined
+
+  - Can be used without initialization as a function parameter
+  - Initialized by argument when function is called
+  - Function can receive different arguments on different calls
+  - While the address in the pointer cannot change, the data at that address may be changed
+
+```c++
+int classSize = 24;
+int * const classPtr = &classSize; //
+```
+
 ```c++
  int x;
  int *p;  // * is used in the declaration:
           // p is a pointer to an integer, since (after dereferencing),
           // *p is an integer
- x = 0;
- // now x == 0
- p = &x;  // & takes the address of x
- // now *p == 0, since p == &x and therefore *p == x
- *p = 1;  // equivalent to x = 1, since p == &x
- // now *p == 1 and x == 1
+ x = 0; // now x == 0
+ p = &x;  // & takes the address of x // now *p == 0, since p == &x and therefore *p == x
+ *p = 1;  // equivalent to x = 1, since p == &x// now *p == 1 and x == 1
 ```
 
-## Dynamic allocation
+## Reference
 
-ask for a specific block of memory ahead of time, new is an operator
+- You must always be able to assume that a **reference is** connected to a legitimate piece of storage. Once a **reference is initialized** to an object, it cannot be changed to refer to another object. Pointers **can** be pointed to another object at any time. A **reference** must be **initialized** when it **is** created.
+
+## Dynamic Memory Allocation
+
+Uses **new** operator to allocate memory. Can allocate storage for a variable while program is running
+
+```C++
+double *dptr;
+dptr = new double; //new returns address of memory location
+int* b = new int[50]; // array with 4*50 bytes and the address of which is b
+delete[] b; //release the address in the heap
+```
+
+**new** returns address of memory location
 
 ```c++
-class Entity
-{    
- //   
-}
-int* b = new int[50]; // array with 4*50 bytes and the address of which is b
+class Entity{}
 Entity* e = new Entity(); // this will call the constructor
 Entity* e = (Entity*)malloc(sizeof(Entity)); //do the same above but no calling constructor
-delete[] b; //release the address in the heap
 delete e; //call the destructor
 ```
+
+## Dangling Pointers and Memory Leaks
+
+- A pointer is dangling if it contains the address of memory that has been freed by a call to **delete**.
+- Solution: set such pointers to 0 as soon as memory is freed.
+- A memory leak occurs if no-longer-needed dynamic memory is not freed. The memory is unavailable for reuse within the program.
+- Solution: free up dynamic memory after use
+
+## Returning Pointers from Functions
+
+- Pointer can be return type of function
+
+``` c++
+int* newNum();
+```
+
+- Function must not return a pointer to a local variable in the function
+- Function should only return a pointer
+  - to data that was passed to the function as an argument
+  - to dynamically allocated memory
+
+## **Pointers to Class Objects** 
+
+```C++
+class Student{}
+Student stu1;
+Student *stuPtr = &stu1;
+(*stuPtr).age = 3;stuPtr->age =3 ;//equal
+
+struct GradeList
+  { 	string courseNum;
+    	int * grades;
+  }
+GradeList test1; *testPtr = &test1;
+testPtr->grades;// Access the grades pointer in test1.  This is the same as (*testPtr).grades
+*testPtr->grades; //Access the value pointed at by testPtr->grades.  This is the same as *(*testPtr).grades
+*test1.grades; //Access the value pointed at by test1.grades
+```
+
+
 
 ## Function template
 
@@ -59,7 +127,6 @@ template <class T>
 class Stack { 
   private: 
     vector<T> elems;     // 元素 
- 
   public: 
     void push(T const&);  // 入栈
     void pop();               // 出栈
@@ -75,8 +142,6 @@ void Stack<T>::push (T const& elem)
     elems.push_back(elem);    
 } 
 ```
-
-
 
 ## File Guards
 
@@ -98,19 +163,100 @@ class euro
 
 * The copy constructor generates a new instance of the object using the value passed in, while the assignment operator copies the value of an object to an existing instance.
 
-## Static variable 
 
-+ The space for the static variable is allocated only one time and this is used for the entirety of the program. Once this variable is declared, it exists till the program executes.
+# OOP
+
+## Inheritance, Polymorphism, Encapsulation
+
+- **Inheritance:** Ability to derive new objects from old ones
+- **Polymorphism:** Ability for different objects to interpret functions differently
+- **Encapsulation:** Combining data structure with actions
+
+## Static and Non-static member 
+
++ **non-static** data member
+  - Each class object has its own copy
+
+- **static** data member
+  - Acts as a global variable
+  - One copy per class type, e.g. counter
+
+## const member function
+
+```C++
+void print(string x) const{}//Makes no modification about the data members (safe function). It is illegal for a const member function to modify a class data member
+```
+
+## Access control
+
+- public
+  - may be accessible from anywhere within a program
+- private
+  - may be accessed only by the member functions, and friends of this class
+- protected
+  - acts as public for derived classes
+  - behaves as private for the rest of the program
 
 ## Constructor
 
-* A function which every time the class initialization will be called. It is pretty much like a `__init__()` in python
-* There is a default constructor if not defined
-* Override the constructors as you like
+- A function which every time the class initialization will be called. **no return type**; **different signatures**; **public access**
+- The default constructor and the destructor of the base class are always called when a new object of a derived class is created or destroyed.
 
-## Inheritance and Polymorphism
+```C++
+class Rectangle
+{
+	private:
+	   int width;
+	   int length;
+	public:
+	   Rectangle();//Default constructor
+	   Rectangle(const Rectangle &r);//Copy constructor
+	   Rectangle(int w, int l);//Constructor with parameters
+	   void set(int w, int l);
+	   int area();
+}
+Rectangle :: Rectangle() { };//default
+Rectangle :: Rectangle (const Rectangle & r) //default copy
+{ width = r.width;  length = r.length;};
 
-- When derived class overrides the base class, the function of the base needs to be virtual. If there is not meaning to instantiate the base class, the class should be set to abstract class, because it includes pure virtual function. 
+```
+
+## Virtual destructor
+
+-  **Virtual destructor** is to destruct the resources in a proper order, when you delete a **base class** pointer pointing to derived **class** object. **Virtual base class destructors** are "best practice" - you **should** always use them to avoid (hard to detect) memory leaks.
+
+## Access method
+
+```C++
+class Point{
+	protected:
+	   int x, y;
+	public:
+	   void set(int a, int b)
+		{x=a; y=b;}
+	   void foo ();
+	   void print();
+};
+class Circle : public Point{
+  private:  double r;
+  public:
+	void set (int a, int b, double c) {
+	     Point :: set(a, b); //same name function call
+	     r = c;}
+	void print(); };
+```
+
+## Virtual function
+
+- By default, C++ matches a function call with the correct function definition at compile time. This is called **static binding**. You can specify that the compiler match a function call with the correct function definition at run time; this is called **dynamic binding**. You declare a function with the keyword **virtual** if you want the compiler to use dynamic binding for that specific function.
+- A virtual function is a member function you may redefine for other derived classes, and can ensure that the compiler will call the redefined virtual function for an object of the corresponding derived class, even if you call that function with a pointer or reference to a base class of the object.
+- A class that declares or inherits a virtual function is called a **polymorphic** class.
+
+
+
+## Abstract class
+
+When derived class overrides the base class, the function of the base needs to be virtual. If there is not meaning to instantiate the base class, the class should be set to abstract class, because it includes pure virtual function. 
 
 ```C++
 class Shapes
@@ -144,43 +290,6 @@ public:
 	Triangle(int a = 0, int b = 0) :Shape(a, b) { }
 	int area() { return (width * height / 2); }
 };
-```
-
-## Encapsulation 
-
-```c++
-class Adder{
-   public:
-      // 构造函数
-      Adder(int i = 0)
-      {
-        total = i;
-      }
-      // 对外的接口
-      void addNum(int number)
-      {
-          total += number;
-      }
-      // 对外的接口
-      int getTotal()
-      {
-          return total;
-      };
-   private:
-      // 对外隐藏的数据
-      int total;
-};
-int main( )
-{
-   Adder a;
-   
-   a.addNum(10);
-   a.addNum(20);
-   a.addNum(30);
- 
-   cout << "Total " << a.getTotal() <<endl;
-   return 0;
-}
 ```
 
 
@@ -251,8 +360,6 @@ int main(void)
 
 
 
-
-
 ## Singleton
 
 Initiated once only, such as random number generator. It is used to organize a bunch of global variables and include them in a single name space. Similar to using a namespace.
@@ -261,7 +368,7 @@ Initiated once only, such as random number generator. It is used to organize a b
 class Singleton
 {
     public:
-    Singleton(const Singleton&) = delete;//copy constructor as delete
+    Singleton(const Singleton&) = delete; //copy constructor as delete
     static Singleton& Get()
     {
         return s_Instance;
@@ -286,19 +393,17 @@ int main()
 
 
 
-
-
 ## Smart Pointer
 
 
 
+## Typeof 
 
 
-## 
 
-## STL
 
-Four kinds
+
+# STL
 
 ### Containers
 
@@ -319,10 +424,6 @@ list<string> mylist({ "3","2" });
 mylist.sort();
 ```
 
-
-
-### Functions
-
 ### Algorithms
 
 ```C++ #include <algorithm>
@@ -335,6 +436,26 @@ mylist.sort();
 ```
 
 ### Iterators
+
+```C++
+#include<iostream> 
+#include<iterator> // for iterators 
+#include<vector> // for vectors 
+using namespace std; 
+int main() 
+{ 
+    vector<int> ar = { 1, 2, 3, 4, 5 }; 
+    // Declaring iterator to a vector 
+    vector<int>::iterator ptr = ar.begin(); 
+    // Using advance() to increment iterator position 
+    // points to 4 
+    advance(ptr, 3); 
+    // Displaying iterator position 
+    cout << "The position of iterator after advancing is : "; 
+    cout << *ptr << " "; 
+    return 0; 
+} 
+```
 
 
 
