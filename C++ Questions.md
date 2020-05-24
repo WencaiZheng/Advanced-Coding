@@ -1,6 +1,13 @@
 # C++ Notes
 
-# Basic
+# Basics
+
+| Type                                                   | Size        |
+| ------------------------------------------------------ | ----------- |
+| bool, char, unsigned char, signed char, __int8         | 1 **byte**  |
+| __int16, short, unsigned short, wchar_t, __wchar_t     | 2 **bytes** |
+| float, __int32, int, unsigned int, long, unsigned long | 4 **bytes** |
+| **double**, __int64, long **double**, long long        | 8 **bytes** |
 
 ## Call by reference / value
 
@@ -13,8 +20,9 @@ void PrintString(const string& string)
 }
 ```
 
-## Pointer and dereference operator
+## Pointer 
 
+- Derived class pointer cannot point to base class
 - Pointer to a constant: cannot change the value that is pointed at.
 
 ```C++
@@ -48,7 +56,20 @@ int * const classPtr = &classSize; //
 
 ## Reference
 
-- You must always be able to assume that a **reference is** connected to a legitimate piece of storage. Once a **reference is initialized** to an object, it cannot be changed to refer to another object. Pointers **can** be pointed to another object at any time. A **reference** must be **initialized** when it **is** created.
+- You must always be able to assume that a **reference is** connected to a legitimate piece of storage. Once a **reference is initialized** to an object, it cannot be changed to refer to another object. 
+- A reference must be initialized on declaration while pointers **can** be pointed to another object at any time.
+- References are used to refer an existing variable in another name whereas pointers are used to store address of variable.
+- References cannot have a null value assigned but pointer can.
+- A reference variable can be referenced by pass by value whereas a pointer can be referenced but pass by reference.
+- 
+- A reference shares the same memory address with the original variable but also takes up some space on the stack whereas a pointer has its own memory address and size on the stack.
+
+```C++
+int b =13;
+int &ref = b;
+```
+
+
 
 ## Dynamic Memory Allocation
 
@@ -399,7 +420,12 @@ int main()
 
 ## Typeof 
 
+give data type a new short name
 
+```C++
+typedef vector<double> vecd;
+typedef vector<vector<double>> metrix;
+```
 
 
 
@@ -407,21 +433,34 @@ int main()
 
 ### Containers
 
+- Sequence Containers: implement data structures which can be accessed in a sequential manner.
+- Container Adaptors : provide a different interface for sequential containers.
+- Associative Containers : implement sorted data structures that can be quickly searched (O(log n) complexity).
+- Unordered Associative Containers:  implement unordered data structures that can be quickly searched
+
 ```C++
-int main() 
-{ 
-    vector<int> g1; 
-    for (int i = 1; i <= 5; i++) 
-        g1.push_back(i); 
-    cout << "Output of begin and end: "; 
-    for (auto i = g1.begin(); i != g1.end(); ++i) 
-        cout << *i << " ";
-}
+vector<int> g1; //Sequence Containers vector
+g1.push_back(1); 
+for (auto i = g1.begin(); i != g1.end(); ++i) 
+    cout << *i << " ";
+list<string> mylist({ "3","2" });// list
 ```
 
 ```C++
-list<string> mylist({ "3","2" });
-mylist.sort();
+stack <int> s; // Stack: LIFO; Queue: FIFO
+s.push(10); 
+s.push(30); 
+
+cout << "\ns.size() : " << s.size(); 
+cout << "\ns.top() : " << s.top(); 
+cout << "\ns.pop() : "; 
+s.pop(); //delete the top of
+
+while (!s.empty()) 
+{ 
+    cout << '\t' << s.top(); 
+    s.pop(); 
+} 
 ```
 
 ### Algorithms
