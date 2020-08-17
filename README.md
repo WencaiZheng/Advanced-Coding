@@ -132,6 +132,3 @@ isinstance(jessi,CleverStudent): # True
 isinstance(jessi,Student): # True
 issubclass(CleverStudent,Student)# True
 ```
-
-
-

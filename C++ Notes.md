@@ -75,7 +75,7 @@ int &ref = b;
 
 ## Dynamic Memory Allocation
 
-Uses **new** operator to allocate memory. Can allocate storage for a variable while program is running
+Uses`new` operator to allocate memory. Can allocate storage for a variable while program is running
 
 ```C++
 double *dptr;
@@ -84,7 +84,7 @@ int* b = new int[50]; // array with 4*50 bytes and the address of which is b
 delete[] b; //release the address in the heap
 ```
 
-**new** returns address of memory location
+`new ` returns address of memory location
 
 ```c++
 class Entity{}
@@ -114,6 +114,8 @@ int* newNum();
   - to dynamically allocated memory
 
 ## **Pointers to Class Objects** 
+
+- Derived class pointer cannot point to base class
 
 ```C++
 class Student{}
@@ -266,8 +268,6 @@ class Circle : public Point{
 - A virtual function is a member function you may redefine for other derived classes, and can ensure that the compiler will call the redefined virtual function for an object of the corresponding derived class, even if you call that function with a pointer or reference to a base class of the object.
 - A class that declares or inherits a virtual function is called a **polymorphic** class.
 
-
-
 ## Abstract class
 
 When derived class overrides the base class, the function of the base needs to be virtual. If there is not meaning to instantiate the base class, the class should be set to abstract class, because it includes pure virtual function. 
@@ -305,8 +305,6 @@ public:
 	int area() { return (width * height / 2); }
 };
 ```
-
-
 
 ## Overloading & Overriding
 
@@ -383,6 +381,7 @@ class Singleton
 {
     public:
     Singleton(const Singleton&) = delete; //copy constructor as delete
+    void operator=(const Singleton &) = delete;
     static Singleton& Get()
     {
         return s_Instance;
@@ -447,8 +446,6 @@ int main()
 - weak_ptr
 
   A weak_ptr is created as a copy of shared_ptr. It provides access to an object that is owned by one or more shared_ptr instances but does not participate in reference counting. The existence or destruction of weak_ptr has no effect on the shared_ptr or its other copies. It is required in some cases to break circular references between shared_ptr instances.
-
-
 
 
 
