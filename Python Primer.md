@@ -208,3 +208,11 @@ Difference between Iterators and Generators in python.
 4. A generator may have any number of **yield** statements.
 5. You can implement your own iterator using a python class; a generator does not need a class in python.
 6. To write a python generator, you can either use a Python function or a comprehension. But for an iterator, you must use the iter() and next() functions.
+
+## Callable instances
+
+can be called using
+
+```python
+function()
+```

@@ -1,3 +1,14 @@
+# Data Basic
+
+**1 byte** is group of 8 **bits**
+
+| Type                                                   | Size        |
+| ------------------------------------------------------ | ----------- |
+| bool, char, unsigned char, signed char, __int8         | 1 **byte**  |
+| __int16, short, unsigned short, wchar_t, __wchar_t     | 2 **bytes** |
+| float, __int32, int, unsigned int, long, unsigned long | 4 **bytes** |
+| **double**, __int64, long **double**, long long        | 8 **bytes** |
+
 # Tree
 
 ## Binary Search Tree
@@ -20,4 +31,10 @@ For hash tables (like dicts or sets), insertion and lookup are O(1), while for a
 ```PYTHON
 
 ```
+
+# Linked list
+
+Array is not good at deleting and adding (O(N)) because it has continuous memory space, while it is good at searching.
+
+Linked list becomes available as a result. Linked list can be seen as a 'one-branch' binary tree. It has O(1) adding and deleting.
 
