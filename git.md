@@ -1,4 +1,6 @@
-# GitHub learn
+# Git Command
+
+Golden rule: never change the shared history; never rebase the shared commits.
 
 ## Basic
 
@@ -30,6 +32,42 @@
 
    ```bash
    git stash --include-untracked
+   ```
+
+6. check diff
+
+   ```bash
+   git diff HEAD HEAD~2
+   git diff branch1 branch2
+   ```
+
+## LOG
+
+1. get git commit graph
+
+   ```bash
+   git log --graph --decorate --oneline
+   ```
+
+2. get one branch to other branch log
+
+   ```bash
+   git log branch1..master --oneline
+   ```
+
+3. get one commit to other commit
+
+   ```bash
+   git log HEAD~5..HEAD^ --oneline
+   ```
+
+   
+
+4. get the commit messages that contains theString
+
+   ```bash
+   git log –grep theString –oneline
+   git log –GtheString --patch #which line
    ```
 
    
@@ -117,6 +155,26 @@
 
 ## Revert to history - Reset
 
+1. show history commit
+
+   ```bash
+   git show HEAD~3
+   ```
+
+   ```bash
+   git show HEAD^^^
+   ```
+
+   ```bash
+   git show HEAD@{"1 month ago"}
+   ```
+
+2. Track one file across all commits
+
+   ```bash
+   git blame filename
+   ```
+
 1. Return to the previous commit
 
    ```bash
@@ -144,3 +202,46 @@
    
 
 ## Modify history
+
+1. modify latest commit
+
+   ```bash
+   git commit --amend
+   ```
+
+2. interactive rebase
+
+   ```bash
+   git rebase -i
+   ```
+
+3. fix seemingly irrecoverable mistakes
+
+   ```bash
+   git reflog
+   ```
+
+4. rewrite entire bunch of commit history
+
+   ```bash
+   git filter-repo
+   ```
+
+5. create new commit revert changes to previous commit
+
+   ```bash
+   git revert
+   ```
+
+   
+
+# Git workflow
+
+good reference: https://nvie.com/posts/a-successful-git-branching-model/
+
+1. Peer to peer model
+2. centralized model
+3. mixed ones
+
+4. pull request model
+5. 
